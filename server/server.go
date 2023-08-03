@@ -1,13 +1,9 @@
 package main
 
 import (
+	"github.com/after-friday/vx-blog/controllers/authentication"
 	"github.com/gofiber/fiber/v2"
 )
-
-type SomeStruct struct {
-	Name string
-	Age  uint8
-}
 
 func main() {
 	app := fiber.New(fiber.Config{
@@ -20,14 +16,9 @@ func main() {
 
 	api := app.Group("/api")
 
-	api.Get("/user", func(c *fiber.Ctx) error {
-		data := SomeStruct{
-			Name: "Super Admin",
-			Age:  24,
-		}
-
-		return c.Status(200).JSON(data)
-	})
+	auth := api.Group("/authentication")
+	auth.Post("/login", authentication.Login)
+	auth.Post("/register", authentication.Register)
 
 	app.Listen(":8080")
 }
